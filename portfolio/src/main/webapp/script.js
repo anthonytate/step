@@ -12,6 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+window.onload = function() {
+  const pictureAndCaptionButton =
+      document.getElementById('picture-and-caption-button');
+  pictureAndCaptionButton.addEventListener('click', showPictureAndCaption);
+  getDataServletMessage();
+};
+
 const SNOW_IMG_CAPTION = 'This is from NSBE Nationals last year when I saw ' +
     'snow for the first time. I later threw on some more jackets, sweats, ' +
     'gloves, and socks and played with the snow for a couple of hours.';
@@ -27,32 +34,34 @@ const MILKSHAKE_IMG_CAPTION = 'Milkshakes are my favorite food/drink. I had ' +
 
 const FISH_IMG_CAPTION = 'I took AP art my senior year of high school. ' +
     'I\'ve been around photography my whole life so it\'s what I chose ' +
-    'to do for my portfolio. '
+    'to do for my portfolio. ';
 
 function showPictureAndCaption() {
-    const picturesAndCaptions = [['images/Snow.jpg', SNOW_IMG_CAPTION],
-        ['images/Chicago.jpg', CHICAGO_IMG_CAPTION],
-        ['images/Baby.jpg', BABY_IMG_CAPTION],
-        ['images/Milkshake.JPG', MILKSHAKE_IMG_CAPTION],
-        ['images/Fish.PNG', FISH_IMG_CAPTION]];
+  const picturesAndCaptions = [
+    ['images/Snow.jpg', SNOW_IMG_CAPTION],
+    ['images/Chicago.jpg', CHICAGO_IMG_CAPTION],
+    ['images/Baby.jpg', BABY_IMG_CAPTION],
+    ['images/Milkshake.JPG', MILKSHAKE_IMG_CAPTION],
+    ['images/Fish.PNG', FISH_IMG_CAPTION],
+  ];
 
-    const IMG_INDEX = Math.floor(Math.random() * 5);
+  const imgIndex = Math.floor(Math.random() * 5);
 
-    const IMG_ELEMENT = document.createElement('img');
-    IMG_ELEMENT.src = picturesAndCaptions[IMG_INDEX][0];
-    const IMG_CAPTION = picturesAndCaptions[IMG_INDEX][1];
+  const imgElement = document.createElement('img');
+  imgElement.src = picturesAndCaptions[imgIndex][0];
+  const imgCaption = picturesAndCaptions[imgIndex][1];
 
-    const PICTURE_CONTAINER = document.getElementById('picture');
-    PICTURE_CONTAINER.innerHTML = '';
-    PICTURE_CONTAINER.appendChild(IMG_ELEMENT);
+  const pictureContainer = document.getElementById('picture');
+  pictureContainer.innerHTML = '';
+  pictureContainer.appendChild(imgElement);
 
-    const CAPTION_CONTAINER = document.getElementById('caption');
-    CAPTION_CONTAINER.innerHTML = '';
-    CAPTION_CONTAINER.innerHTML = IMG_CAPTION;
+  const captionContainer = document.getElementById('caption');
+  captionContainer.innerHTML = '';
+  captionContainer.innerHTML = imgCaption;
 }
 
 async function getDataServletMessage() {
-    const RESPONSE = await fetch('/data');
-    const MESSAGE = await RESPONSE.json();
-    document.getElementById('data-message').innerHTML = MESSAGE;
+  const response = await fetch('/data');
+  const message = await response.json();
+  document.getElementById('data-message').innerHTML = message;
 }
