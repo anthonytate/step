@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     ArrayList<String> phrases = new ArrayList<String>();
@@ -38,8 +37,8 @@ public class DataServlet extends HttpServlet {
   }
 
   private String convertToJson(ArrayList<String> phrases) {
-      Gson gson = new Gson();
-      String json = gson.toJson(phrases);
-      return json;
+    Gson gson = new Gson();
+    String json = gson.toJson(phrases);
+    return json;
   }
 }
