@@ -51,3 +51,8 @@ function showPictureAndCaption() {
     CAPTION_CONTAINER.innerHTML = IMG_CAPTION;
 }
 
+async function getDataServletMessage() {
+    const RESPONSE = await fetch('/data');
+    const MESSAGE = await RESPONSE.text();
+    document.getElementById('data-message').innerHTML = MESSAGE;
+}
