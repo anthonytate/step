@@ -53,6 +53,6 @@ function showPictureAndCaption() {
 
 async function getDataServletMessage() {
     const RESPONSE = await fetch('/data');
-    const MESSAGE = await RESPONSE.text();
+    const MESSAGE = await RESPONSE.json();
     document.getElementById('data-message').innerHTML = MESSAGE;
 }
