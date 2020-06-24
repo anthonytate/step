@@ -2,8 +2,15 @@
   margin-left: auto;
   margin-right: auto;
   width: 650px;
+  max-width: 65%;
 }
 
-#greeting-container {
+#picture img {
+  max-width: 65%;
+  max-height: 75%;
   margin-top: 20px;
+}
+
+#caption {
+    margin-top: 10px;
 }
