@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Entity taskEntity = new Entity("Task");
@@ -57,7 +56,7 @@ public class DataServlet extends HttpServlet {
       String comment = (String) entity.getProperty("comment");
       tasks.add(comment);
     }
-    
+
     Gson gson = new Gson();
     response.setContentType("application/json;");
     response.getWriter().println(gson.toJson(tasks));
