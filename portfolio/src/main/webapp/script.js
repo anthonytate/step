@@ -17,6 +17,9 @@ window.onload = function() {
       document.getElementById('picture-and-caption-button');
   pictureAndCaptionButton.addEventListener('click', showPictureAndCaption);
   getComments();
+  const deleteCommentsButton =
+      document.getElementById('delete-comments-button');
+  deleteCommentsButton.addEventListener('click', deleteComments);
 };
 
 const SNOW_IMG_CAPTION = 'This is from NSBE Nationals last year when I saw ' +
@@ -61,13 +64,13 @@ function showPictureAndCaption() {
 }
 
 async function getComments() {
-  const response = await fetch('/data');
+  const commentAmount = document.getElementById('comment-amount').value;
+  const response = await fetch('/data?max-comments=' + commentAmount);
   const comments = await response.json();
   const listElement = document.getElementById('comments');
-  console.log('before for each');
+  listElement.innerHTML = '';
   comments.forEach((comment) => {
     listElement.appendChild(createListElement(comment));
-    console.log('in for each');
   });
 }
 
@@ -75,4 +78,9 @@ function createListElement(text) {
   const liElement = document.createElement('li');
   liElement.innerText = text;
   return liElement;
+}
+
+async function deleteComments() {
+  await fetch('/delete-data', {method: 'post'});
+  getComments();
 }
