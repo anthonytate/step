@@ -17,6 +17,7 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
@@ -50,16 +51,16 @@ public class DataServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
-    List<String> tasks = new ArrayList<>();
-    for (Entity entity : results.asIterable()) {
-      long id = entity.getKey().getId();
+    int maxComments = Integer.parseInt(request.getParameter("max-comments"));
+    ArrayList<String> comments = new ArrayList<>();
+    for (Entity entity : results.asIterable(FetchOptions.Builder.withLimit(maxComments))) {
       String comment = (String) entity.getProperty("comment");
-      tasks.add(comment);
+      comments.add(comment);
     }
 
     Gson gson = new Gson();
     response.setContentType("application/json;");
-    response.getWriter().println(gson.toJson(tasks));
+    response.getWriter().println(gson.toJson(comments));
   }
 
   private String convertToJson(ArrayList<String> list) {

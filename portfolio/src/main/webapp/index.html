@@ -34,12 +34,30 @@
         <h1>Comment Submission</h1>
         <p>Please leave a comment on the page below</p>
         <form action="/data" method="post" id="comment-form">
-          <input type="text" name="comment" placeholder="Your comment here" />
+          <input
+            type="text"
+            name="comment"
+            placeholder="Your comment here"
+            autocomplete="off"
+          />
           <button type="submit">Submit</button>
         </form>
         <br />
         <h3>Comments</h3>
+        <label for="comment-amount">Amount of comments shown: </label>
+        <select
+          name="comment-amount"
+          id="comment-amount"
+          onchange="getComments()"
+        >
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+        </select>
         <ul id="comments"></ul>
+        <button type="button" id="delete-comments-button">
+          Clear Comments
+        </button>
       </div>
     </div>
   </body>
