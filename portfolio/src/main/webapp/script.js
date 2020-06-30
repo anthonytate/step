@@ -13,9 +13,11 @@
 // limitations under the License.
 
 window.onload = function() {
-  const pictureAndCaptionButton =
-      document.getElementById('picture-and-caption-button');
-  pictureAndCaptionButton.addEventListener('click', showPictureAndCaption);
+  showPictureAndCaption(0);
+  const nextButton = document.getElementById('next-picture-button');
+  nextButton.addEventListener('click', nextPicture);
+  const previousButton = document.getElementById('previous-picture-button');
+  previousButton.addEventListener('click', previousPicture);
   getComments();
   const deleteCommentsButton =
       document.getElementById('delete-comments-button');
@@ -39,16 +41,33 @@ const FISH_IMG_CAPTION = 'I took AP art my senior year of high school. ' +
     'I\'ve been around photography my whole life so it\'s what I chose ' +
     'to do for my portfolio. ';
 
-function showPictureAndCaption() {
-  const picturesAndCaptions = [
-    ['images/Snow.jpg', SNOW_IMG_CAPTION],
-    ['images/Chicago.jpg', CHICAGO_IMG_CAPTION],
-    ['images/Baby.jpg', BABY_IMG_CAPTION],
-    ['images/Milkshake.JPG', MILKSHAKE_IMG_CAPTION],
-    ['images/Fish.PNG', FISH_IMG_CAPTION],
-  ];
+const picturesAndCaptions = [
+  ['images/Snow.jpg', SNOW_IMG_CAPTION],
+  ['images/Chicago.jpg', CHICAGO_IMG_CAPTION],
+  ['images/Baby.jpg', BABY_IMG_CAPTION],
+  ['images/Milkshake.JPG', MILKSHAKE_IMG_CAPTION],
+  ['images/Fish.PNG', FISH_IMG_CAPTION],
+];
 
-  const imgIndex = Math.floor(Math.random() * 5);
+let imgIndex = 0;
+
+function nextPicture() {
+  showPictureAndCaption(1);
+}
+
+function previousPicture() {
+  showPictureAndCaption(-1);
+}
+
+function showPictureAndCaption(n) {
+  imgIndex += n;
+
+  if (imgIndex >= picturesAndCaptions.length) {
+    imgIndex = 0;
+  }
+  if (imgIndex < 0) {
+    imgIndex = picturesAndCaptions.length - 1;
+  }
 
   const imgElement = document.createElement('img');
   imgElement.src = picturesAndCaptions[imgIndex][0];
@@ -76,6 +95,7 @@ async function getComments() {
 
 function createListElement(text) {
   const liElement = document.createElement('li');
+  liElement.className = 'comment';
   liElement.innerText = text;
   return liElement;
 }

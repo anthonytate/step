@@ -1,16 +1,73 @@
 .content {
   margin-left: auto;
   margin-right: auto;
-  width: 650px;
-  max-width: 65%;
+  width: 1000px;
+  max-width: 80%;
+  background-color: #fff8f0;
+  padding: 5px;
+}
+
+#picture-and-caption {
+  background: #000;
+  text-align: center;
+  width: 950px;
+  max-width: 95%;
+  min-height: 400px;
+  max-height: 50%;
+  position: relative;
+  margin: auto;
 }
 
 #picture img {
-  max-width: 65%;
-  max-height: 75%;
-  margin-top: 20px;
+  padding-top: 10px;
+  height: 450px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  max-width: 85%;
+  max-height: 40%;
 }
 
 #caption {
-  margin-top: 10px;
+  padding: 10px;
+  color: #fff;
+}
+
+#next-picture-button,
+#previous-picture-button {
+  position: absolute;
+  top: 40%;
+  color: white;
+  background-color: black;
+  width: auto;
+  padding: 20px;
+  border: none;
+  font-size: 20px;
+}
+
+#next-picture-button:focus,
+#previous-picture-button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+#next-picture-button {
+  right: 0;
+}
+
+#previous-picture-button {
+  left: 0;
+}
+
+#comments {
+  list-style: none;
+  margin: 0px;
+  padding: 10px;
+}
+
+.comment {
+  box-shadow: 0px 1px 2px 1px #a5947f;
+  background: #fff0e0;
+  margin: 10px;
+  padding: 15px;
 }
