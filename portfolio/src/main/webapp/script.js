@@ -60,8 +60,6 @@ function previousPicture() {
 }
 
 function showPictureAndCaption(n) {
-  //   const imgIndex = Math.floor(Math.random() * 5);
-
   imgIndex += n;
 
   if (imgIndex >= picturesAndCaptions.length) {
