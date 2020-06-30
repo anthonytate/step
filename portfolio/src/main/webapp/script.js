@@ -14,9 +14,9 @@
 
 window.onload = function() {
   showPictureAndCaption(0);
-  const nextButton = document.getElementById('next');
+  const nextButton = document.getElementById('next-picture-button');
   nextButton.addEventListener('click', nextPicture);
-  const previousButton = document.getElementById('previous');
+  const previousButton = document.getElementById('previous-picture-button');
   previousButton.addEventListener('click', previousPicture);
   getComments();
   const deleteCommentsButton =
