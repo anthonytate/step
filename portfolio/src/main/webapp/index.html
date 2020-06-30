@@ -18,32 +18,14 @@
         friends and family. My favorite artist is J. Cole and Kendrick Lamar is
         second.
       </p>
-      <p>Click the button to see some pictures of me! (5 total)</p>
-      <button
-        type="button"
-        id="picture-and-caption-button"
-        onclick="getPictureAndCaption()"
-      >
-        Hello
-      </button>
       <div id="picture-and-caption">
         <div id="picture"></div>
+        <button type="button" id="previous">&#10094;</button>
+        <button type="button" id="next">&#10095;</button>
         <div id="caption"></div>
       </div>
       <div id="comment-section">
-        <h1>Comment Submission</h1>
-        <p>Please leave a comment on the page below</p>
-        <form action="/data" method="post" id="comment-form">
-          <input
-            type="text"
-            name="comment"
-            placeholder="Your comment here"
-            autocomplete="off"
-          />
-          <button type="submit">Submit</button>
-        </form>
-        <br />
-        <h3>Comments</h3>
+        <h1>Comments</h1>
         <label for="comment-amount">Amount of comments shown: </label>
         <select
           name="comment-amount"
@@ -58,6 +40,18 @@
         <button type="button" id="delete-comments-button">
           Clear Comments
         </button>
+        <h3>Comment Submission</h3>
+        <p>Please leave a comment on the page below</p>
+        <form action="/data" method="post" id="comment-form">
+          <input
+            type="text"
+            name="comment"
+            placeholder="Your comment here"
+            autocomplete="off"
+          />
+          <button type="submit">Submit</button>
+        </form>
+        <br />
       </div>
     </div>
   </body>
