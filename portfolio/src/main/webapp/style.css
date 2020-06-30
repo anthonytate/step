@@ -33,8 +33,8 @@
   color: #fff;
 }
 
-#next,
-#previous {
+#next-picture-button,
+#previous-picture-button {
   position: absolute;
   top: 40%;
   color: white;
@@ -45,17 +45,17 @@
   font-size: 20px;
 }
 
-#next:focus,
-#previous:focus {
+#next-picture-button:focus,
+#previous-picture-button:focus {
   outline: none;
   box-shadow: none;
 }
 
-#next {
+#next-picture-button {
   right: 0;
 }
 
-#previous {
+#previous-picture-button {
   left: 0;
 }
 
