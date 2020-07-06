@@ -22,6 +22,8 @@ window.onload = function() {
   const deleteCommentsButton =
       document.getElementById('delete-comments-button');
   deleteCommentsButton.addEventListener('click', deleteComments);
+  logIn();
+  document.getElementById('log-in-link').addEventListener('click', logIn);
 };
 
 const SNOW_IMG_CAPTION = 'This is from NSBE Nationals last year when I saw ' +
@@ -93,14 +95,34 @@ async function getComments() {
   });
 }
 
-function createListElement(text) {
+function createListElement(comment) {
   const liElement = document.createElement('li');
   liElement.className = 'comment';
-  liElement.innerText = text;
+  liElement.innerText = comment;
   return liElement;
 }
 
 async function deleteComments() {
   await fetch('/delete-data', {method: 'post'});
   getComments();
+}
+
+async function logIn() {
+    const response = await fetch('/log-in');
+    const status = await response.json();
+
+    const commentSubmission = document.getElementById('comment-submission');
+    const linkElement = document.getElementById('log-in-link');
+    const logInMessageElement = document.getElementById('log-in-message');
+
+    if (status.loggedIn) {
+        commentSubmission.style.display = 'block';
+        linkElement.innerHTML = 'Log out';
+        logInMessageElement.style.display = 'none';
+    } else {
+        commentSubmission.style.display = 'none';
+        linkElement.innerHTML = 'Log in';
+        logInMessageElement.style.display = 'block';
+    }
+    linkElement.setAttribute('href', status.link);
 }
