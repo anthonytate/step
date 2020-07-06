@@ -60,10 +60,10 @@ public class DataServlet extends HttpServlet {
     int maxComments = Integer.parseInt(request.getParameter("max-comments"));
     ArrayList<Comment> comments = new ArrayList<>();
     for (Entity entity : results.asIterable(FetchOptions.Builder.withLimit(maxComments))) {
-      String content = (String) entity.getProperty("comment");
-      String email = (String) entity.getProperty("email");
       long id = entity.getKey().getId();
-      Comment comment = new Comment(content, email, id);
+      String email = (String) entity.getProperty("email");
+      String content = (String) entity.getProperty("comment");
+      Comment comment = new Comment(id, email, content);
       comments.add(comment);
     }
 

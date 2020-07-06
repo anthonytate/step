@@ -13,18 +13,30 @@
 // limitations under the License.
 
 window.onload = function() {
+  initializePictures();
+  initializeComments();
+  initializeLogIn();
+};
+
+function initializePictures() {
   showPictureAndCaption(0);
   const nextButton = document.getElementById('next-picture-button');
   nextButton.addEventListener('click', nextPicture);
   const previousButton = document.getElementById('previous-picture-button');
   previousButton.addEventListener('click', previousPicture);
+}
+
+function initializeComments() {
   getComments();
   const deleteCommentsButton =
       document.getElementById('delete-comments-button');
   deleteCommentsButton.addEventListener('click', deleteComments);
+}
+
+function initializeLogIn() {
   logIn();
   document.getElementById('log-in-link').addEventListener('click', logIn);
-};
+}
 
 const SNOW_IMG_CAPTION = 'This is from NSBE Nationals last year when I saw ' +
     'snow for the first time. I later threw on some more jackets, sweats, ' +
@@ -91,11 +103,11 @@ async function getComments() {
   const listElement = document.getElementById('comments');
   listElement.innerHTML = '';
   comments.forEach((comment) => {
-    listElement.appendChild(createListElement(comment));
+    listElement.appendChild(createCommentListElement(comment));
   });
 }
 
-function createListElement(comment) {
+function createCommentListElement(comment) {
   const liElement = document.createElement('li');
   liElement.className = 'comment';
   liElement.innerHTML =
