@@ -13,16 +13,30 @@
 // limitations under the License.
 
 window.onload = function() {
+  initializePictures();
+  initializeComments();
+  initializeLogIn();
+};
+
+function initializePictures() {
   showPictureAndCaption(0);
   const nextButton = document.getElementById('next-picture-button');
   nextButton.addEventListener('click', nextPicture);
   const previousButton = document.getElementById('previous-picture-button');
   previousButton.addEventListener('click', previousPicture);
+}
+
+function initializeComments() {
   getComments();
   const deleteCommentsButton =
       document.getElementById('delete-comments-button');
   deleteCommentsButton.addEventListener('click', deleteComments);
-};
+}
+
+function initializeLogIn() {
+  logIn();
+  document.getElementById('log-in-link').addEventListener('click', logIn);
+}
 
 const SNOW_IMG_CAPTION = 'This is from NSBE Nationals last year when I saw ' +
     'snow for the first time. I later threw on some more jackets, sweats, ' +
@@ -89,18 +103,39 @@ async function getComments() {
   const listElement = document.getElementById('comments');
   listElement.innerHTML = '';
   comments.forEach((comment) => {
-    listElement.appendChild(createListElement(comment));
+    listElement.appendChild(createCommentListElement(comment));
   });
 }
 
-function createListElement(text) {
+function createCommentListElement(comment) {
   const liElement = document.createElement('li');
   liElement.className = 'comment';
-  liElement.innerText = text;
+  liElement.innerHTML =
+      '<p>' + comment.userEmail + '</p><p>' + comment.content + '</p>';
   return liElement;
 }
 
 async function deleteComments() {
   await fetch('/delete-data', {method: 'post'});
   getComments();
+}
+
+async function logIn() {
+  const response = await fetch('/log-in');
+  const status = await response.json();
+
+  const commentSubmission = document.getElementById('comment-submission');
+  const linkElement = document.getElementById('log-in-link');
+  const logInMessageElement = document.getElementById('log-in-message');
+
+  if (status.loggedIn) {
+    commentSubmission.style.display = 'block';
+    linkElement.innerHTML = 'Log out';
+    logInMessageElement.style.display = 'none';
+  } else {
+    commentSubmission.style.display = 'none';
+    linkElement.innerHTML = 'Log in';
+    logInMessageElement.style.display = 'block';
+  }
+  linkElement.setAttribute('href', status.link);
 }

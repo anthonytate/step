@@ -41,17 +41,23 @@
           Clear Comments
         </button>
         <h3>Comment Submission</h3>
-        <p>Please leave a comment on the page below</p>
-        <form action="/data" method="post" id="comment-form">
-          <input
-            type="text"
-            name="comment"
-            placeholder="Your comment here"
-            autocomplete="off"
-          />
-          <button type="submit">Submit</button>
-        </form>
-        <br />
+        <div id="comment-submission">
+          <p>Please leave a comment on the page below</p>
+          <form action="/data" method="post" id="comment-form">
+            <input
+              type="text"
+              name="comment"
+              placeholder="Your comment here"
+              autocomplete="off"
+            />
+            <button type="submit">Submit</button>
+          </form>
+          <br />
+        </div>
+        <div id="comment-log-in">
+          <h4 id="log-in-message">Log in to enter comments</h4>
+          <a id="log-in-link" href="#"> Log in</a>
+        </div>
       </div>
     </div>
   </body>
