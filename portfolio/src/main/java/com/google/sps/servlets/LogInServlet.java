@@ -18,23 +18,21 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/log-in")
 public class LogInServlet extends HttpServlet {
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    UserService userService = UserServiceFactory.getUserService();
+    LogInStatus logInStatus;
 
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        
-        UserService userService = UserServiceFactory.getUserService();
-        LogInStatus logInStatus;
-
-        if (userService.isUserLoggedIn()) {
-            String logoutUrl = userService.createLogoutURL("/index.html");
-            logInStatus = new LogInStatus(true, logoutUrl);
-        } else {
-            String loginUrl = userService.createLoginURL("/index.html");
-            logInStatus = new LogInStatus(false, loginUrl);
-        }
-
-        Gson gson = new Gson();
-        response.setContentType("application/json;");
-        response.getWriter().println(gson.toJson(logInStatus));
+    if (userService.isUserLoggedIn()) {
+      String logoutUrl = userService.createLogoutURL("/index.html");
+      logInStatus = new LogInStatus(true, logoutUrl);
+    } else {
+      String loginUrl = userService.createLoginURL("/index.html");
+      logInStatus = new LogInStatus(false, loginUrl);
     }
+
+    Gson gson = new Gson();
+    response.setContentType("application/json;");
+    response.getWriter().println(gson.toJson(logInStatus));
+  }
 }

@@ -98,7 +98,8 @@ async function getComments() {
 function createListElement(comment) {
   const liElement = document.createElement('li');
   liElement.className = 'comment';
-  liElement.innerText = comment;
+  liElement.innerHTML =
+      '<p>' + comment.userEmail + '</p><p>' + comment.content + '</p>';
   return liElement;
 }
 
@@ -108,21 +109,21 @@ async function deleteComments() {
 }
 
 async function logIn() {
-    const response = await fetch('/log-in');
-    const status = await response.json();
+  const response = await fetch('/log-in');
+  const status = await response.json();
 
-    const commentSubmission = document.getElementById('comment-submission');
-    const linkElement = document.getElementById('log-in-link');
-    const logInMessageElement = document.getElementById('log-in-message');
+  const commentSubmission = document.getElementById('comment-submission');
+  const linkElement = document.getElementById('log-in-link');
+  const logInMessageElement = document.getElementById('log-in-message');
 
-    if (status.loggedIn) {
-        commentSubmission.style.display = 'block';
-        linkElement.innerHTML = 'Log out';
-        logInMessageElement.style.display = 'none';
-    } else {
-        commentSubmission.style.display = 'none';
-        linkElement.innerHTML = 'Log in';
-        logInMessageElement.style.display = 'block';
-    }
-    linkElement.setAttribute('href', status.link);
+  if (status.loggedIn) {
+    commentSubmission.style.display = 'block';
+    linkElement.innerHTML = 'Log out';
+    logInMessageElement.style.display = 'none';
+  } else {
+    commentSubmission.style.display = 'none';
+    linkElement.innerHTML = 'Log in';
+    logInMessageElement.style.display = 'block';
+  }
+  linkElement.setAttribute('href', status.link);
 }

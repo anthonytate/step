@@ -42,6 +42,7 @@ public class DataServlet extends HttpServlet {
     taskEntity.setProperty("comment", request.getParameter("comment"));
     UserService userService = UserServiceFactory.getUserService();
     taskEntity.setProperty("email", userService.getCurrentUser().getEmail());
+    taskEntity.setProperty("timestamp", System.currentTimeMillis());
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(taskEntity);
@@ -51,15 +52,18 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query("Task").addSort("comment", SortDirection.DESCENDING);
+    Query query = new Query("Task").addSort("timestamp", SortDirection.DESCENDING);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
     int maxComments = Integer.parseInt(request.getParameter("max-comments"));
-    ArrayList<String> comments = new ArrayList<>();
+    ArrayList<Comment> comments = new ArrayList<>();
     for (Entity entity : results.asIterable(FetchOptions.Builder.withLimit(maxComments))) {
-      String comment = (String) entity.getProperty("comment");
+      String content = (String) entity.getProperty("comment");
+      String email = (String) entity.getProperty("email");
+      long id = entity.getKey().getId();
+      Comment comment = new Comment(content, email, id);
       comments.add(comment);
     }
 
