@@ -43,13 +43,16 @@
         <h3>Comment Submission</h3>
         <div id="comment-submission">
           <p>Please leave a comment on the page below</p>
-          <form action="/data" method="post" id="comment-form">
+          <form method="post" id="comment-form" enctype="multipart/form-data">
             <input
               type="text"
               name="comment"
               placeholder="Your comment here"
               autocomplete="off"
             />
+            <br />
+            <input type="file" name="comment-image" />
+            <br />
             <button type="submit">Submit</button>
           </form>
           <br />
