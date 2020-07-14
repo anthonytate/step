@@ -31,6 +31,7 @@ function initializeComments() {
   const deleteCommentsButton =
       document.getElementById('delete-comments-button');
   deleteCommentsButton.addEventListener('click', deleteComments);
+  getFormAction();
 }
 
 function initializeLogIn() {
@@ -110,8 +111,9 @@ async function getComments() {
 function createCommentListElement(comment) {
   const liElement = document.createElement('li');
   liElement.className = 'comment';
-  liElement.innerHTML =
-      '<p>' + comment.userEmail + '</p><p>' + comment.content + '</p>';
+  liElement.innerHTML = '<p>' + comment.userEmail + '</p><p>' +
+      comment.content + '</p>' +
+      '<img class="comment-image" src="' + comment.imgUrl + '"/>';
   return liElement;
 }
 
@@ -138,4 +140,12 @@ async function logIn() {
     logInMessageElement.style.display = 'block';
   }
   linkElement.setAttribute('href', status.link);
+}
+
+async function getFormAction() {
+  const response = await fetch('/image-url');
+  const imageUrl = await response.text();
+
+  const submissionForm = document.getElementById('comment-form');
+  submissionForm.action = imageUrl;
 }
