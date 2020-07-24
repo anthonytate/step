@@ -22,13 +22,13 @@ import java.util.Set;
 
 public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    long duration = request.getDuration();
+    long durationMinutes = request.getDuration();
     Collection<String> attendees = request.getAttendees();
     Collection<String> optionalAttendees = request.getOptionalAttendees();
     ArrayList<TimeRange> mandatoryTimes = new ArrayList<>();
     ArrayList<TimeRange> optionalTimes = new ArrayList<>();
 
-    if (duration > 24 * 60) {
+    if (durationMinutes > 24 * 60) {
       return mandatoryTimes;
     }
     mandatoryTimes.add(TimeRange.WHOLE_DAY);
@@ -41,32 +41,18 @@ public final class FindMeetingQuery {
     // If the event has any regular attendees, process the event in mandatoryTimes, otherwise
     // the event only has optional attendees, so it will be processed in optionalTimes
     for (Event event : events) {
-      Set eventAttendees = event.getAttendees();
-      boolean attendingEvent = false;
-      for (String attendee : attendees) {
-        if (eventAttendees.contains(attendee)) {
-          attendingEvent = true;
-          break;
-        }
-      }
+      Set<String> eventAttendees = event.getAttendees();
+      boolean mandatoriesAttending = attendingEvent(eventAttendees, attendees);
       boolean optionals = false;
-      if (attendingEvent == false) {
-        for (String attendee : optionalAttendees) {
-          if (eventAttendees.contains(attendee)) {
-            optionals = true;
-            break;
-          }
-        }
+      if (mandatoriesAttending == false) {
+        optionals = attendingEvent(eventAttendees, optionalAttendees);
         if (optionals == false) {
           continue;
         }
       }
 
-      if (optionals == false) {
-        checkEventCompatibility(mandatoryTimes, event.getWhen(), duration);
-      } else {
-        checkEventCompatibility(optionalTimes, event.getWhen(), duration);
-      }
+      checkEventCompatibility(optionals ? optionalTimes : mandatoryTimes, event.getWhen(),
+                              durationMinutes);
     }
 
     // if TimeRanges from optionalTimes and mandatoryTimes overlap, and if there is room
@@ -75,16 +61,15 @@ public final class FindMeetingQuery {
     ArrayList<TimeRange> availableTimes = new ArrayList<>();
     for (TimeRange optionalTime : optionalTimes) {
       for (TimeRange mandatoryTime : mandatoryTimes) {
-        if (optionalTime.overlaps(mandatoryTime)) {
-          int start = optionalTime.start() < mandatoryTime.start() ? mandatoryTime.start()
-                                                                   : optionalTime.start();
-          int end =
-              optionalTime.end() < mandatoryTime.end() ? optionalTime.end() : mandatoryTime.end();
-          if (end == TimeRange.END_OF_DAY && end - start >= duration - 1) {
-            availableTimes.add(TimeRange.fromStartEnd(start, end, true));
-          } else if (end - start >= duration) {
-            availableTimes.add(TimeRange.fromStartEnd(start, end, false));
-          }
+        if (!optionalTime.overlaps(mandatoryTime)) {
+          continue;
+        }
+        int start = Math.max(optionalTime.start(), mandatoryTime.start());
+        int end = Math.min(optionalTime.end(), mandatoryTime.end());
+        if (end == TimeRange.END_OF_DAY && end - start >= durationMinutes - 1) {
+          availableTimes.add(TimeRange.fromStartEnd(start, end, true));
+        } else if (end - start >= durationMinutes) {
+          availableTimes.add(TimeRange.fromStartEnd(start, end, false));
         }
       }
     }
@@ -102,28 +87,34 @@ public final class FindMeetingQuery {
   // if any TimeRanges in timeRanges overlap with the eventTimeRange, remove the current
   // TimeRange and add another if there is enough room before or after the eventTimeRange
   private void checkEventCompatibility(
-      ArrayList<TimeRange> timeRanges, TimeRange eventTimeRange, long duration) {
+      ArrayList<TimeRange> timeRanges, TimeRange eventTimeRange, long durationMinutes) {
     int i = 0;
     while (i < timeRanges.size()) {
       TimeRange timeRange = timeRanges.get(i);
       if (timeRange.overlaps(eventTimeRange)) {
-        if (timeRange.start() + duration <= eventTimeRange.start()) {
+        if (timeRange.start() + durationMinutes <= eventTimeRange.start()) {
           timeRanges.add(
               TimeRange.fromStartEnd(timeRange.start(), eventTimeRange.start(), false));
         }
-        if (timeRange.end() >= duration + eventTimeRange.end()) {
-          if (timeRange.end() == TimeRange.END_OF_DAY) {
-            timeRanges.add(
-                TimeRange.fromStartEnd(eventTimeRange.end(), timeRange.end(), true));
-          } else {
-            timeRanges.add(
-                TimeRange.fromStartEnd(eventTimeRange.end(), timeRange.end(), false));
-          }
+        if (timeRange.end() >= durationMinutes + eventTimeRange.end()) {
+          timeRanges.add(
+              TimeRange.fromStartEnd(eventTimeRange.end(), timeRange.end(),
+                                     timeRange.end() == TimeRange.END_OF_DAY));
         }
         timeRanges.remove(i);
       } else {
         i++;
       }
     }
+  }
+
+  private boolean attendingEvent(
+      Collection<String> eventAttendees, Collection<String> requestAttendees) {
+    for (String attendee : requestAttendees) {
+      if (eventAttendees.contains(attendee)) {
+        return true;
+      }
+    }
+    return false;
   }
 }
